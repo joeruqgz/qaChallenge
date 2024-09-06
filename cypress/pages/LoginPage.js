@@ -1,9 +1,10 @@
 class LoginPage {
   elements = {
-    usernameInput: () => cy.get("#user-name"),
+    usernameInput: () => cy.get("#email"),
     passwordInput: () => cy.get("#password"),
-    loginBtn: () => cy.get("#login-button"),
-    errorMessage: () => cy.get('h3[data-test="error"]'),
+    loginBtn: () => cy.get("#login"),
+    message: () => cy.get('#msg'),
+    
   };
 
   typeUsername(username) {
@@ -23,6 +24,23 @@ class LoginPage {
     this.elements.passwordInput().type(password);
     this.elements.loginBtn().click();
   }
+  emptyLogin(username,password){
+    this.elements.usernameInput().should('have.value', '');
+    this.elements.passwordInput().should('have.value', '');
+    this.elements.loginBtn().click();
+  }
+  emptyUser(username){
+    this.elements.usernameInput().type(username);
+    
+    this.elements.loginBtn().click();
+  }
+  emptyPass(password){
+    
+    this.elements.passwordInput().type(password);
+    this.elements.loginBtn().click();
+  }
 }
+
+
 
 export const loginPage = new LoginPage();

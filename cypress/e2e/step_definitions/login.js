@@ -5,26 +5,38 @@ import {
 } from "@badeball/cypress-cucumber-preprocessor";
 import {loginPage} from '@pages/LoginPage'
 
-Given("A web browser is at the saucelabs login page", () => {
-  cy.visit("/");
+Given("Se ingresa a la pagina de login", () => {
+  cy.visit("/login");
 });
 
-When("A user enters the username {string}, the password {string}, and clicks on the login button", (username,password) => {
+When("ingreso el correo {string}, la clave {string}, y hago click en el boton login", (username,password) => {
   loginPage.submitLogin(username,password)
   
 });
 
-When("A user provides incorrect credentials, and clicks on the login button", (table) => {
-  table.hashes().forEach((row) => {
-    cy.log(row.username);
-    cy.log(row.password);
-    loginPage.submitLogin(row.username, row.password)
+When("no ingreso el correo , ni la clave , y hago click en el boton login", () => {
+  loginPage.emptyLogin()
+  
+});
 
-  });
+When("no ingreso el correo , la clave {string} , y hago click en el boton login", (password) => {
+  loginPage.emptyPass(password)
+  
 });
-Then("the url will contains the inventory subdirectory", () => {
-  cy.url().should("contains", "/inventory.html");
+
+When("ingreso el correo {string} , no clave , y hago click en el boton login", (username) => {
+  loginPage.emptyUser(username)
+  
 });
-Then("The error message {string} is displayed", (errorMessage) => {
-  loginPage.elements.errorMessage().should("have.text", errorMessage);
+
+Then("se muestra mensaje correcto {string}", (errorMessage) => {
+  loginPage.elements.message().should("have.text", 'LOGIN VALID');
+});
+
+Then("se muestra mensaje error {string}", (errorMessage) => {
+  loginPage.elements.message().should("have.text", 'INVALID');
+});
+
+Then("se muestra mensaje error campos obligatorios {string}", (errorMessage) => {
+  loginPage.elements.message().should("have.text", 'REQUIRED');
 });
